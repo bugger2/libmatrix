@@ -1,13 +1,2 @@
-CC:=clang
-CFLAGS=-lm
-
-all: libmatrix
-
-libmatrix:
-	$(CC) $(CFLAGS) -shared -o libmatrix.so -fPIC matrix.c
-
-clean:
-	rm libmatrix.so
-
-remake: clean
-	make
+install:
+	if [ -f /usr/bin/doas ]; then doas cp matrix.h /usr/include; else sudo cp matrix.h /usr/include; fi
