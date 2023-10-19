@@ -29,7 +29,7 @@ Matrix matrix_init(size_t rows, size_t columns)
 	return ret;
 }
 
-Matrix matrix_transpose(Matrix* matrix)
+Matrix* matrix_transpose(Matrix* matrix)
 {
 	Matrix ret = matrix_init(matrix->columns, matrix->rows);
 
@@ -39,10 +39,10 @@ Matrix matrix_transpose(Matrix* matrix)
 			ret.array[j][i] = matrix->array[i][j];
 	}
 
-	return ret;
+	return &ret;
 }
 
-Matrix matrix_times_matrix(Matrix* mat1, Matrix* mat2)
+Matrix* matrix_times_matrix(Matrix* mat1, Matrix* mat2)
 {
 	// [m x n] * [n x p] = [m x p]. Will fail if n1 != n2.
 	// Basically, because of math, the amount of columns in the left matrix must be equal to the amount of rows in the right matrix
@@ -63,10 +63,10 @@ Matrix matrix_times_matrix(Matrix* mat1, Matrix* mat2)
 		}
 	}
 
-	return ret;
+	return &ret;
 }
 
-Matrix matrix_times_scalar(Matrix* matrix, double scalar)
+Matrix* matrix_times_scalar(Matrix* matrix, double scalar)
 {
 	Matrix ret = matrix_init(matrix->rows, matrix->columns);
 	for(size_t i = 0; i < matrix->rows; i++)
@@ -77,10 +77,10 @@ Matrix matrix_times_scalar(Matrix* matrix, double scalar)
 		}
 	}
 
-	return ret;
+	return &ret;
 }
 
-Matrix matrix_plus_matrix(Matrix* mat1, Matrix* mat2)
+Matrix* matrix_plus_matrix(Matrix* mat1, Matrix* mat2)
 {
 	// matrices must be of equal dimensions
 	assert(mat1->rows == mat2->rows && mat1->columns == mat2->columns);
@@ -95,10 +95,10 @@ Matrix matrix_plus_matrix(Matrix* mat1, Matrix* mat2)
 		}
 	}
 
-	return ret;
+	return &ret;
 }
 
-Matrix matrix_plus_scalar(Matrix* matrix, double scalar)
+Matrix* matrix_plus_scalar(Matrix* matrix, double scalar)
 {
 	Matrix ret = matrix_init(matrix->rows, matrix->columns);
 
@@ -110,10 +110,10 @@ Matrix matrix_plus_scalar(Matrix* matrix, double scalar)
 		}
 	}
 
-	return ret;
+	return &ret;
 }
 
-Matrix matrix_minor(Matrix* matrix, size_t row, size_t column)
+Matrix* matrix_minor(Matrix* matrix, size_t row, size_t column)
 {
 	Matrix ret = matrix_init(matrix->rows, matrix->columns);
 
@@ -127,7 +127,7 @@ Matrix matrix_minor(Matrix* matrix, size_t row, size_t column)
 		}
 	}
 
-	return ret;
+	return &ret;
 }
 
 // compute the determinant of a square matrix with laplace expansion
@@ -147,7 +147,7 @@ double matrix_determinant(Matrix* matrix)
 	{
 		for(size_t i = 0; i < matrix->columns; i++)
 		{
-			Matrix temp_determ = matrix_minor(matrix, 0, i);
+			Matrix temp_determ = *matrix_minor(matrix, 0, i);
 			ret += powf(-1, i) * matrix->array[0][i] * matrix_determinant(&temp_determ);
 			matrix_free(&temp_determ);
 		}
@@ -159,7 +159,7 @@ double matrix_determinant(Matrix* matrix)
 }
 
 // calculate the cofactor matrix of the supplied matrix
-Matrix matrix_cofactor(Matrix* matrix)
+Matrix* matrix_cofactor(Matrix* matrix)
 {
 	Matrix ret = matrix_init(matrix->rows, matrix->columns);
 		
@@ -167,26 +167,26 @@ Matrix matrix_cofactor(Matrix* matrix)
 	{
 		for(size_t j = 0; j < matrix->columns; j++)
 		{
-			Matrix temp_minor = matrix_minor(matrix, i, j);
+			Matrix temp_minor = *matrix_minor(matrix, i, j);
 			ret.array[i][j] = matrix_determinant(&temp_minor);
 			matrix_free(&temp_minor);
 		}
 	}
 
-	return ret;
+	return &ret;
 }
 
 // calculate the transpose of the cofactor of the supplied matrix
-Matrix matrix_adjoint(Matrix* matrix)
+Matrix* matrix_adjoint(Matrix* matrix)
 {
-	Matrix temp = matrix_cofactor(matrix);
-	Matrix ret = matrix_transpose(&temp);
+	Matrix temp = *matrix_cofactor(matrix);
+	Matrix ret = *matrix_transpose(&temp);
 	matrix_free(&temp);
-	return ret;
+	return &ret;
 }
 
 // get the inverse of a matrix
-Matrix matrix_inverse(Matrix* matrix)
+Matrix* matrix_inverse(Matrix* matrix)
 {
 	// FIXME: this function is not finished
 
@@ -194,11 +194,11 @@ Matrix matrix_inverse(Matrix* matrix)
 	assert(matrix->rows == matrix->columns);
 
 	// inverse = 1/determinant * adjoint
-	Matrix adjoint = matrix_adjoint(matrix);
-	Matrix ret = matrix_times_scalar(&adjoint, (1/matrix_determinant(matrix)));
+	Matrix adjoint = *matrix_adjoint(matrix);
+	Matrix ret = *matrix_times_scalar(&adjoint, (1/matrix_determinant(matrix)));
 	matrix_free(&adjoint);
 
-	return ret;
+	return &ret;
 }
 
 void matrix_free(Matrix* matrix)
