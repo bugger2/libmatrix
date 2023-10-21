@@ -29,6 +29,16 @@ Matrix matrix_init(size_t rows, size_t columns)
 	return ret;
 }
 
+Matrix* matrix_identity(size_t n)
+{
+	Matrix ret = matrix_init(n, n);
+	for(size_t i = 0; i < ret.rows; i++)
+	{
+		ret.array[i][i] = 1;
+	}
+	return &ret;
+}
+
 Matrix* matrix_transpose(Matrix* matrix)
 {
 	Matrix ret = matrix_init(matrix->columns, matrix->rows);

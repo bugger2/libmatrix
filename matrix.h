@@ -13,6 +13,9 @@ typedef struct
 // initialize a 2d matrix of rows x columns
 Matrix matrix_init(size_t rows, size_t columns);
 
+// create a an n x n indentity matrix
+Matrix* matrix_identity(size_t n);
+
 // create a 2d matrix which is the transpose of matrix
 Matrix* matrix_transpose(Matrix* matrix);
 
