@@ -98,6 +98,11 @@ Matrix* matrix_plus_matrix(Matrix* mat1, Matrix* mat2)
 	return &ret;
 }
 
+Matrix* matrix_minus_matrix(Matrix* mat1, Matrix* mat2)
+{
+	return matrix_plus_matrix(mat1, matrix_times_scalar(mat2, -1));
+}
+
 Matrix* matrix_plus_scalar(Matrix* matrix, double scalar)
 {
 	Matrix ret = matrix_init(matrix->rows, matrix->columns);

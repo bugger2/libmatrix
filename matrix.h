@@ -25,6 +25,9 @@ Matrix* matrix_times_scalar(Matrix* matrix, double scalar);
 // get the sum of two matrices
 Matrix* matrix_plus_matrix(Matrix* mat1, Matrix* mat2);
 
+// get the difference of two matrices
+Matrix* matrix_minus_matrix(Matrix* mat1, Matrix* mat2);
+
 // get the sum of a matrix and a scalar value
 Matrix* matrix_plus_scalar(Matrix* matrix, double scalar);
 
