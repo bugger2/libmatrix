@@ -20,10 +20,10 @@ Matrix matrix_identity(size_t n);
 Matrix matrix_transpose(Matrix* matrix);
 
 // find the dot product of two matrices
-Matrix matrix_times_matrix(Matrix* mat1, Matrix* mat2);
+Matrix matrix_dot_matrix(Matrix* mat1, Matrix* mat2);
 
 // find the dot product of a matrix and a scalar
-Matrix matrix_times_scalar(Matrix* matrix, double scalar);
+Matrix matrix_dot_scalar(Matrix* matrix, double scalar);
 
 // get the sum of two matrices
 Matrix matrix_plus_matrix(Matrix* mat1, Matrix* mat2);
@@ -107,7 +107,7 @@ Matrix matrix_transpose(Matrix* matrix) {
     return ret;
 }
 
-Matrix matrix_times_matrix(Matrix* mat1, Matrix* mat2) {
+Matrix matrix_dot_matrix(Matrix* mat1, Matrix* mat2) {
     // [m x n] * [n x p] = [m x p]. Will fail if n1 != n2.
     // Basically, because of math, the amount of columns in the left matrix must be equal to the amount of rows in the right matrix
     assert(mat1->columns == mat2->rows);
@@ -127,12 +127,12 @@ Matrix matrix_times_matrix(Matrix* mat1, Matrix* mat2) {
     return ret;
 }
 
-Matrix matrix_times_scalar(Matrix* matrix, double scalar) {
+Matrix matrix_dot_scalar(Matrix* matrix, double scalar) {
     Matrix ret = matrix_init(matrix->rows, matrix->columns);
     for(size_t i = 0; i < matrix->rows; i++) {
         for(size_t j = 0; j < matrix->columns; j++)
         {
-            ret.data[i][j] *= scalar;
+            ret.data[i][j] = matrix->data[i][j] * scalar;
         }
     }
 
@@ -155,7 +155,7 @@ Matrix matrix_plus_matrix(Matrix* mat1, Matrix* mat2) {
 }
 
 Matrix matrix_minus_matrix(Matrix* mat1, Matrix* mat2) {
-    Matrix correctedMat2 = matrix_times_scalar(mat2, -1);
+    Matrix correctedMat2 = matrix_dot_scalar(mat2, -1);
     Matrix ret =  matrix_plus_matrix(mat1, &correctedMat2);
     matrix_free(&correctedMat2);
     return ret;
@@ -254,7 +254,7 @@ Matrix matrix_inverse(Matrix* matrix) {
 
     // inverse = 1/determinant * adjoint
     Matrix adjoint = matrix_adjoint(matrix);
-    Matrix ret = matrix_times_scalar(&adjoint, (1/matrix_determinant(matrix)));
+    Matrix ret = matrix_dot_scalar(&adjoint, (1/matrix_determinant(matrix)));
     matrix_free(&adjoint);
  
     return ret;
