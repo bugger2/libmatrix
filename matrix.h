@@ -60,7 +60,6 @@ void matrix_free(Matrix* matrix);
 
 #ifdef MATRIX_IMPLEMENTATION
 
-#include <math.h>
 #include <assert.h>
 #include <math.h>
 #include <stdlib.h>
@@ -210,7 +209,7 @@ double matrix_determinant(Matrix* matrix) {
     if(matrix->rows > 2) {
         for(size_t i = 0; i < matrix->columns; i++) {
             Matrix temp_determ = matrix_minor(matrix, 0, i);
-            ret += powf(-1, i) * matrix->data[0][i] * matrix_determinant(&temp_determ);
+            ret += pow(-1, i) * matrix->data[0][i] * matrix_determinant(&temp_determ);
             matrix_free(&temp_determ);
         }
     } else if(matrix->rows == 2) {
