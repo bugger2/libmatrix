@@ -2,7 +2,7 @@ CC:=gcc
 CFLAGS=-lm
 
 test:
-	$(CC) $(CFLAGS) test.c -o test
+	$(CC) test.c -o test $(CFLAGS)
 
 clean:
 	rm test
