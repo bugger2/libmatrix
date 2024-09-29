@@ -156,7 +156,7 @@ Matrix matrix_plus_matrix(Matrix* mat1, Matrix* mat2) {
 
 Matrix matrix_minus_matrix(Matrix* mat1, Matrix* mat2) {
     Matrix correctedMat2 = matrix_dot_scalar(mat2, -1);
-    Matrix ret =  matrix_plus_matrix(mat1, &correctedMat2);
+    Matrix ret = matrix_plus_matrix(mat1, &correctedMat2);
     matrix_free(&correctedMat2);
     return ret;
 }
@@ -164,9 +164,9 @@ Matrix matrix_minus_matrix(Matrix* mat1, Matrix* mat2) {
 Matrix matrix_plus_scalar(Matrix* matrix, double scalar) {
     Matrix ret = matrix_init(matrix->rows, matrix->columns);
 
-    for(size_t i = 0; i < matrix->rows; i++) {
-        for(size_t j = 0; j < matrix->columns; j++) {
-            matrix->data[i][j] = scalar;
+    for(size_t i = 0; i < ret.rows; i++) {
+        for(size_t j = 0; j < ret.columns; j++) {
+            ret.data[i][j] = matrix->data[i][j] + scalar;
         }
     }
 

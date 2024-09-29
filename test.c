@@ -17,6 +17,7 @@ void test_dot_matrix();
 void test_dot_scalar();
 void test_plus_matrix();
 void test_minus_matrix();
+void test_plus_scalar();
 
 int main(void)
 {
@@ -27,6 +28,7 @@ int main(void)
     test_dot_scalar();
     test_plus_matrix();
     test_minus_matrix();
+    test_plus_scalar();
 
 	return 0;
 }
@@ -36,8 +38,7 @@ Matrix example_matrix() {
     int count = 0;
     for (int i = 0; i < ret.rows; i++) {
         for (int j = 0; j < ret.columns; j++) {
-            ret.data[i][j] = count;
-            count++;
+            ret.data[i][j] = count++;
         }
     }
 
@@ -266,12 +267,15 @@ void test_plus_scalar() {
     assert(result.rows == matrix.rows);
     assert(result.columns == matrix.columns);
 
-    int count = 0;
+    int count = 1;
     for (int i = 0; i < result.rows; i++) {
         for (int j = 0; j < result.columns; j++) {
-            assert(result.data[i][j] == count + 1);
+            assert(result.data[i][j] == count++);
         }
     }
+
+    matrix_free(&matrix);
+    matrix_free(&result);
 
     printf("done.\n");
 }
