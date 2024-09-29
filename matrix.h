@@ -246,15 +246,13 @@ Matrix matrix_adjugate(Matrix* matrix) {
 
 // get the inverse of a matrix
 Matrix matrix_inverse(Matrix* matrix) {
-    // FIXME: this function is not finished
-
     // this only works with square matrices
     assert(matrix->rows == matrix->columns);
 
     // inverse = 1/determinant * adjoint
-    Matrix adjoint = matrix_adjugate(matrix);
-    Matrix ret = matrix_dot_scalar(&adjoint, (1/matrix_determinant(matrix)));
-    matrix_free(&adjoint);
+    Matrix adjugate = matrix_adjugate(matrix);
+    Matrix ret = matrix_dot_scalar(&adjugate, (1/matrix_determinant(matrix)));
+    matrix_free(&adjugate);
  
     return ret;
 }

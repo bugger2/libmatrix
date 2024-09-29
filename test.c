@@ -23,6 +23,7 @@ void test_minor();
 void test_determinant();
 void test_cofactor();
 void test_adjugate();
+void test_inverse();
 
 int main(void)
 {
@@ -38,6 +39,7 @@ int main(void)
     test_determinant();
     test_cofactor();
     test_adjugate();
+    test_inverse();
 
 	return 0;
 }
@@ -393,6 +395,39 @@ void test_adjugate() {
 
     matrix_free(&adjugate);
     matrix_free(&matrix);
+
+    printf("done.\n");
+}
+
+void test_inverse() {
+    printf("testing inverse... ");
+
+    Matrix matrix = matrix_init(3, 3);
+    double data[3][3] = {
+        {3, 0,  2},
+        {2, 0, -2},
+        {0, 1,  1}
+    };
+    for (int i = 0; i < matrix.rows; i++) {
+        memcpy(matrix.data[i], data[i], 3 * sizeof(double));
+    }
+
+    Matrix inverse = matrix_inverse(&matrix);
+    Matrix identity = matrix_identity(3);
+
+    // a matrix dotted with its inverse should result in the identity matrix
+    Matrix maybe_identity = matrix_dot_matrix(&matrix, &inverse);
+
+    for (int i = 0; i < inverse.rows; i++) {
+        for (int j = 0; j < inverse.columns; j++) {
+            assert(maybe_identity.data[i][j] == identity.data[i][j]);
+        }
+    }
+
+    matrix_free(&matrix);
+    matrix_free(&inverse);
+    matrix_free(&identity);
+    matrix_free(&maybe_identity);
 
     printf("done.\n");
 }
