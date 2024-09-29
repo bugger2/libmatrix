@@ -34,7 +34,7 @@ Matrix matrix_minus_matrix(Matrix* mat1, Matrix* mat2);
 // get the sum of a matrix and a scalar value
 Matrix matrix_plus_scalar(Matrix* matrix, double scalar);
 
-// find the matrix identical to the supplied matrix, but missing the supplied row and column
+// find the matrix identical to the supplied matrix, but missing the supplied row and column. ZERO BASED INDEX
 Matrix matrix_minor(Matrix* matrix, size_t row, size_t column);
 
 // find the determinant of an arbitrarily sized square matrix with laplace expansion

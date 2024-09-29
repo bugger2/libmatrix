@@ -18,6 +18,7 @@ void test_dot_scalar();
 void test_plus_matrix();
 void test_minus_matrix();
 void test_plus_scalar();
+void test_minor();
 
 int main(void)
 {
@@ -29,6 +30,7 @@ int main(void)
     test_plus_matrix();
     test_minus_matrix();
     test_plus_scalar();
+    test_minor();
 
 	return 0;
 }
@@ -276,6 +278,29 @@ void test_plus_scalar() {
 
     matrix_free(&matrix);
     matrix_free(&result);
+
+    printf("done.\n");
+}
+
+void test_minor() {
+    printf("testing matrix_minor... ");
+
+    Matrix matrix = example_matrix();
+
+    // should result in
+    // [[0],
+    //  [4]]
+    Matrix result = matrix_minor(&matrix, 1, 1);
+
+    assert(result.rows = matrix.rows - 1);
+    assert(result.columns = matrix.columns - 1);
+
+    printf("\n");
+    matrix_print(&matrix);
+    matrix_print(&result);
+
+    assert(result.data[0][0] == 0);
+    assert(result.data[1][0] == 4);
 
     printf("done.\n");
 }
