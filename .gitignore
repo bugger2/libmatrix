@@ -1,6 +1,10 @@
 # test binary
 /test
 
+# Direnv files
+/.direnv
+/.envrc
+
 # Prerequisites
 *.d
 
