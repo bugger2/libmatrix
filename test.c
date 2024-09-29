@@ -295,10 +295,6 @@ void test_minor() {
     assert(result.rows = matrix.rows - 1);
     assert(result.columns = matrix.columns - 1);
 
-    printf("\n");
-    matrix_print(&matrix);
-    matrix_print(&result);
-
     assert(result.data[0][0] == 0);
     assert(result.data[1][0] == 4);
 
