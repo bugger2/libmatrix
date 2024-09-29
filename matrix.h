@@ -44,7 +44,7 @@ double matrix_determinant(Matrix* matrix);
 Matrix matrix_cofactor(Matrix* matrix);
 
 // calculate the transpose of the cofactor of the supplied matrix
-Matrix matrix_adjoint(Matrix* matrix);
+Matrix matrix_adjugate(Matrix* matrix);
 
 // get the inverse of a matrix
 Matrix matrix_inverse(Matrix* matrix);
@@ -218,7 +218,6 @@ double matrix_determinant(Matrix* matrix) {
         ret = matrix->data[0][0];
     }
 
-    printf("ret in matrix_determinant is %f\n", ret);
     return ret;
 }
 
@@ -229,7 +228,7 @@ Matrix matrix_cofactor(Matrix* matrix) {
     for(size_t i = 0; i < matrix->rows; i++) {
         for(size_t j = 0; j < matrix->columns; j++) {
             Matrix temp_minor = matrix_minor(matrix, i, j);
-            ret.data[i][j] = matrix_determinant(&temp_minor);
+            ret.data[i][j] = pow(-1, i+j+2) * matrix_determinant(&temp_minor);
             matrix_free(&temp_minor);
         }
     }
@@ -238,7 +237,7 @@ Matrix matrix_cofactor(Matrix* matrix) {
 }
 
 // calculate the transpose of the cofactor of the supplied matrix
-Matrix matrix_adjoint(Matrix* matrix) {
+Matrix matrix_adjugate(Matrix* matrix) {
     Matrix temp = matrix_cofactor(matrix);
     Matrix ret = matrix_transpose(&temp);
     matrix_free(&temp);
@@ -253,7 +252,7 @@ Matrix matrix_inverse(Matrix* matrix) {
     assert(matrix->rows == matrix->columns);
 
     // inverse = 1/determinant * adjoint
-    Matrix adjoint = matrix_adjoint(matrix);
+    Matrix adjoint = matrix_adjugate(matrix);
     Matrix ret = matrix_dot_scalar(&adjoint, (1/matrix_determinant(matrix)));
     matrix_free(&adjoint);
  

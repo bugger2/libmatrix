@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 
 #define MATRIX_IMPLEMENTATION
@@ -19,6 +20,9 @@ void test_plus_matrix();
 void test_minus_matrix();
 void test_plus_scalar();
 void test_minor();
+void test_determinant();
+void test_cofactor();
+void test_adjugate();
 
 int main(void)
 {
@@ -31,6 +35,9 @@ int main(void)
     test_minus_matrix();
     test_plus_scalar();
     test_minor();
+    test_determinant();
+    test_cofactor();
+    test_adjugate();
 
 	return 0;
 }
@@ -297,6 +304,95 @@ void test_minor() {
 
     assert(result.data[0][0] == 0);
     assert(result.data[1][0] == 4);
+
+    matrix_free(&matrix);
+    matrix_free(&result);
+
+    printf("done.\n");
+}
+
+void test_determinant() {
+    printf("testing determinant... ");
+
+    Matrix matrix = matrix_init(3, 3);
+    double data[3][3] = {
+        {1 , 0, 2},
+        {3 , 1, 0},
+        {-1, 1, 4}
+    };
+    for (int i = 0; i < matrix.rows; i++) {
+        memcpy(matrix.data[i], data[i], 3 * sizeof(double));
+    }
+
+    double determinant = matrix_determinant(&matrix);
+    assert(determinant == 12);
+
+    matrix_free(&matrix);
+
+    printf("done.\n");
+}
+
+void test_cofactor() {
+    printf("testing cofactor... ");
+
+    Matrix matrix = matrix_init(3, 3);
+    double data[3][3] = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+    for (int i = 0; i < matrix.rows; i++) {
+        memcpy(matrix.data[i], data[i], 3 * sizeof(double));
+    }
+
+    Matrix result = matrix_cofactor(&matrix);
+
+    double correct[3][3] = {
+        {-3, 6, -3},
+        {6, -12, 6},
+        {-3, 6, -3}
+    };
+
+    for (int i = 0; i < result.rows; i++) {
+        for (int j = 0; j < result.columns; j++) {
+            assert(result.data[i][j] == correct[i][j]);
+        }
+    }
+
+    matrix_free(&matrix);
+    matrix_free(&result);
+
+    printf("done.\n");
+}
+
+void test_adjugate() {
+    printf("testing adjugate... ");
+
+    Matrix matrix = matrix_init(3, 3);
+    double data[3][3] = {
+        {1, 2, 3},
+        {0, 4, 5},
+        {1, 0, 6}
+    };
+    for (int i = 0; i < matrix.rows; i++) {
+        memcpy(matrix.data[i], data[i], 3 * sizeof(double));
+    }
+
+    Matrix adjugate = matrix_adjugate(&matrix);
+    double correct[3][3] = {
+        {24, -12, -2},
+        {5 ,  3 , -5},
+        {-4,  2 ,  4}
+    };
+
+    for (int i = 0; i < adjugate.rows; i++) {
+        for (int j = 0; j < adjugate.columns; j++) {
+            assert(adjugate.data[i][j] == correct[i][j]);
+        }
+    }
+
+    matrix_free(&adjugate);
+    matrix_free(&matrix);
 
     printf("done.\n");
 }
